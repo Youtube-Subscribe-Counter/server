@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '../http/http.client';
-import { YoutubeChannelSearchDto } from './dto/youtube.dto';
+import { YoutubeChannelDto, YoutubeChannelSearchDto } from './dto/youtube.dto';
 
 @Injectable()
 export class YoutubeClient {
@@ -37,17 +37,31 @@ export class YoutubeClient {
       })
       .map(({ channelId }) => channelId);
 
-    return channelId;
+    return { channelId };
   }
 
-  async findSubscribers(channel: string) {
-    // return new YoutubeChannelResponseDto();
-    const response = this.httpClient.get<any>({
-      url: `${this.baseUrl}/youtube`,
-    });
+  async getSubscribers(channelId: string) {
+    try {
+      const response = this.httpClient.get<YoutubeChannelDto>({
+        url: `${this.baseUrl}/channels`,
+        params: {
+          part: 'statistics',
+          id: channelId,
+          key: this.apiKey,
+        },
+      });
 
-    const { data } = await firstValueFrom<any>(response);
+      const { data } = await firstValueFrom(response);
 
-    return data;
+      const channel = data.items.find(({ id }) => id === channelId);
+
+      if (!channel) {
+        return { subscribers: 0 };
+      }
+
+      return { subscribers: channel.statistics.subscriberCount };
+    } catch {
+      console.log('error');
+    }
   }
 }

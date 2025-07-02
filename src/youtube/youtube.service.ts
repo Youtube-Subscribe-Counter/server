@@ -6,15 +6,12 @@ import { YoutubeClient } from './youtube.client';
 export class YoutubeService {
   constructor(private readonly youtubeClient: YoutubeClient) {}
 
-  async getChannelId(q: string) {
-    const channelId = await this.youtubeClient.getChannelId(q);
-    return { channelId };
+  getChannelId(q: string) {
+    return this.youtubeClient.getChannelId(q);
   }
 
-  findSubscribers(channel: string) {
-    // return new YoutubeChannelResponseDto();
-    // return { channel };
-
-    return this.youtubeClient.findSubscribers(channel);
+  async getSubscribers(q: string) {
+    const { channelId } = await this.getChannelId(q);
+    return await this.youtubeClient.getSubscribers(channelId);
   }
 }

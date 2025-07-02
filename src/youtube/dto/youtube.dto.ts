@@ -1,21 +1,23 @@
-export class YoutubeChannelResponseDto {
+export class YoutubeChannelDto {
   kind: string;
   etag: string;
   pageInfo: {
     totalResults: number;
     resultsPerPage: number;
   };
-  items: Array<{
-    kind: string;
-    etag: string;
-    id: string;
-    statistics: {
-      viewCount: string;
-      subscriberCount: string;
-      hiddenSubscriberCount: string | boolean;
-      videoCount: string;
-    };
-  }>;
+  items: [
+    {
+      kind: string;
+      etag: string;
+      id: string;
+      statistics: {
+        viewCount: string;
+        subscriberCount: string;
+        hiddenSubscriberCount: string | boolean;
+        videoCount: string;
+      };
+    },
+  ];
 }
 
 export class YoutubeChannelSearchDto {

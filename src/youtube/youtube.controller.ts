@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { YoutubeService } from './youtube.service';
 
 @Controller('youtube')
@@ -10,8 +10,8 @@ export class YoutubeController {
     return this.youtubeService.getChannelId(q);
   }
 
-  @Get(':channel/subscribers')
-  findSubscribers(@Param('channel') channel: string) {
-    return this.youtubeService.findSubscribers(channel);
+  @Get('/subscribers')
+  getSubscribers(@Query('q') q: string) {
+    return this.youtubeService.getSubscribers(q);
   }
 }
